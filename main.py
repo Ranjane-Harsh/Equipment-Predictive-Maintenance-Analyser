@@ -1,5 +1,6 @@
 from src.data_processing import load_data, engineer_features, create_labels
-from src.model import split_data, train_xgboost
+from src.model import split_data, train_xgboost, evaluate_model
+from src.reporting import generate_maintenance_report
 
 def main():
     print("1. Loading dataset...")
@@ -21,7 +22,16 @@ def main():
 
     print("5. Training XGBoost Model...")
     model = train_xgboost(X_train, y_train)
+
+    print("6. Evaluating Model...")
+    evaluate_model(model, X_test, y_test)
+
+    print("\n7. Generating Sample Maintenance Report (from latest test records)...")
+    latest_records = test.groupby('machineID').tail(1).copy()
+    latest_probs = model.predict_proba(latest_records[features])[:, 1]
+    latest_records['failure_probability'] = latest_probs
     
+    generate_maintenance_report(latest_records, threshold=0.85)
     
 
 if __name__ == "__main__":

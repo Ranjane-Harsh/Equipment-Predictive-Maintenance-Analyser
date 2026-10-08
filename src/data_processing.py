@@ -29,12 +29,15 @@ def engineer_features(telemetry, machines):
     return features
 
 def create_labels(features, failures, horizon_hours = 24):
-    features = features.merge(failures, on=['machineID', 'datetime'], how = 'left')
+    features = features.copy()
+    features = features.merge(failures, on=['machineID', 'datetime'], how='left')
     features['failure'] = features['failure'].fillna('none')
     features['isfailure'] = (features['failure'] != 'none').astype(int)
 
-    features['target_24h'] = features.groupby('machineID')['isfailure'].fillna(method = 'bfill', limit = horizon_hours)
+    features['target_24h'] = (
+        features.groupby('machineID')['isfailure']
+        .transform(lambda s: s.bfill(limit=horizon_hours))
+    )
     features['target_24h'] = features['target_24h'].fillna(0).astype(int)
 
-    features = features[features['isfailure'] == 0]
     return features
