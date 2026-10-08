@@ -1,5 +1,5 @@
 from src.data_processing import load_data, engineer_features, create_labels
-from src.model import split_data
+from src.model import split_data, train_xgboost
 
 def main():
     print("1. Loading dataset...")
@@ -16,6 +16,11 @@ def main():
 
     print("4. Splitting data...")
     train, test = split_data(data_df, train_fraction= 0.8)
+    X_train, y_train = train[features], train['target_24h']
+    X_test, y_test = test[features], test['target_24h']
+
+    print("5. Training XGBoost Model...")
+    model = train_xgboost(X_train, y_train)
     
     
 
