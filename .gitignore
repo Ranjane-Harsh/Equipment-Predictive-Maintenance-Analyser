@@ -8,3 +8,7 @@ venv/
 
 # Local secrets
 .env
+
+#file
+generate_interview_report.py
+Interview_Report_Predictive_Maintenance.pdf

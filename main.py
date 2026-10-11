@@ -4,12 +4,16 @@ from src.reporting import generate_maintenance_report
 
 def main():
     print("1. Loading dataset...")
-    telemetry, failures, machines = load_data()
+    telemetry, failures, machines, errors, maint = load_data()
 
     print("2. Engineering Features...")
-    features_df = engineer_features(telemetry, machines)
+    features_df = engineer_features(telemetry, machines, errors, maint)
 
-    print("3. Creating Labels for Training...")
+    print(features_df.head(20). to_string())
+    
+
+
+    """print("3. Creating Labels for Training...")
     data_df = create_labels(features_df, failures, horizon_hours= 24)
 
     #drop non feature columns
@@ -38,7 +42,7 @@ def main():
     
     # UPDATE: Use the calibrated optimal_threshold instead of a hardcoded 0.85
     print(f"Applying calibrated threshold of {optimal_threshold:.2%} to filter alerts:")
-    generate_maintenance_report(latest_records, threshold=optimal_threshold)
+    generate_maintenance_report(latest_records, threshold=optimal_threshold)"""
     
 
 if __name__ == "__main__":
