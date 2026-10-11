@@ -24,14 +24,21 @@ def main():
     model = train_xgboost(X_train, y_train)
 
     print("6. Evaluating Model...")
-    evaluate_model(model, X_test, y_test)
-
-    print("\n7. Generating Sample Maintenance Report (from latest test records)...")
+    optimal_threshold = evaluate_model(model, X_test, y_test)
+    
+    #save_model(model, "xgboost_pdm.joblib")
+    
+    print("\n7. Generating Diagnostic Maintenance Report...")
+    # Extract the most recent reading for each machine in the test set
     latest_records = test.groupby('machineID').tail(1).copy()
+    
+    # Compute probabilities using the trained model
     latest_probs = model.predict_proba(latest_records[features])[:, 1]
     latest_records['failure_probability'] = latest_probs
     
-    generate_maintenance_report(latest_records, threshold=0.85)
+    # UPDATE: Use the calibrated optimal_threshold instead of a hardcoded 0.85
+    print(f"Applying calibrated threshold of {optimal_threshold:.2%} to filter alerts:")
+    generate_maintenance_report(latest_records, threshold=optimal_threshold)
     
 
 if __name__ == "__main__":
