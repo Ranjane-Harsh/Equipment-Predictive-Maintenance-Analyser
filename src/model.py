@@ -5,9 +5,9 @@ from sklearn.metrics import roc_auc_score, classification_report, precision_reca
 import joblib
 
 def split_data(df, train_fraction = 0.8):
-    split_idx = int(len(df) * train_fraction)
     df_sorted = df.sort_values('datetime')
-
+    split_idx = int(len(df_sorted) * train_fraction)
+    
     train = df_sorted.iloc[:split_idx]
     test = df_sorted.iloc[split_idx:]
 
@@ -67,3 +67,7 @@ def evaluate_model(model, X_test, y_test):
     print(classification_report(y_test, custom_preds))
     
     return optimal_thresh
+
+def save_model(model, filepath="xgboost_pdm.joblib"):
+    joblib.dump(model, filepath)
+    print(f"Model saved to {filepath}")

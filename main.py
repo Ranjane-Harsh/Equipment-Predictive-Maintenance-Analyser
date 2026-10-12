@@ -1,5 +1,5 @@
 from src.data_processing import load_data, engineer_features, create_labels
-from src.model import split_data, train_xgboost, evaluate_model
+from src.model import split_data, train_xgboost, evaluate_model, save_model
 from src.reporting import generate_maintenance_report
 
 def main():
@@ -9,11 +9,7 @@ def main():
     print("2. Engineering Features...")
     features_df = engineer_features(telemetry, machines, errors, maint)
 
-    print(features_df.head(20). to_string())
-    
-
-
-    """print("3. Creating Labels for Training...")
+    print("3. Creating Labels for Training...")
     data_df = create_labels(features_df, failures, horizon_hours= 24)
 
     #drop non feature columns
@@ -30,7 +26,7 @@ def main():
     print("6. Evaluating Model...")
     optimal_threshold = evaluate_model(model, X_test, y_test)
     
-    #save_model(model, "xgboost_pdm.joblib")
+    save_model(model, "xgboost_pdm.joblib")
     
     print("\n7. Generating Diagnostic Maintenance Report...")
     # Extract the most recent reading for each machine in the test set
@@ -42,7 +38,7 @@ def main():
     
     # UPDATE: Use the calibrated optimal_threshold instead of a hardcoded 0.85
     print(f"Applying calibrated threshold of {optimal_threshold:.2%} to filter alerts:")
-    generate_maintenance_report(latest_records, threshold=optimal_threshold)"""
+    generate_maintenance_report(latest_records, threshold=optimal_threshold)
     
 
 if __name__ == "__main__":
