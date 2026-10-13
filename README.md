@@ -6,7 +6,7 @@ A Machine Learning system built to analyze multi-sensor IoT telemetry data, dete
 
 ## 📌 Project Overview
 
-In industrial manufacturing, unexpected machine breakdowns cause expensive factory downtime, safety hazards, and costly emergency repairs. However, machines rarely fail without warning—they emit subtle signals such as vibrating slightly more than usual, running hot, or logging non-fatal error codes before breaking down completely.
+In industrial manufacturing, unexpected machine breakdowns cause expensive factory downtime, safety hazards, and costly emergency repairs. However, machines rarely fail without warning, they emit subtle signals such as vibrating slightly more than usual, running hot, or logging non-fatal error codes before breaking down completely.
 
 This project implements an end-to-end **Predictive Maintenance Pipeline** on real-world industrial IoT telemetry:
 1. **Monitors multi-sensor readings** (voltage, rotation speed, pressure, and vibration) over time.
@@ -37,7 +37,7 @@ This project implements an end-to-end **Predictive Maintenance Pipeline** on rea
         ▼
 [Machine Learning Engine]
  ├── 80/20 Chronological train-test split (Prevents future data leakage)
- ├── Square-root balanced class weighting (Handles ~1,250 : 1 extreme class imbalance)
+ ├── Square-root balanced class weighting (Handles extreme class imbalance)
  └── XGBoost Classifier training
         │
         ▼
@@ -54,14 +54,14 @@ This project implements an end-to-end **Predictive Maintenance Pipeline** on rea
 
 ## 📊 Key Results & Metrics
 
-Predicting rare industrial failures involves extreme class imbalance (less than **0.1%** of data points are failure events). Standard metrics like accuracy or ROC-AUC can be deceptive in this setting. Our model is optimized for **Precision-Recall (PR-AUC)**:
+Predicting rare industrial failures involves extreme class imbalance (less than **0.1%** of data points are failure events). Standard metrics like accuracy or ROC-AUC can be deceptive in this setting. This model is optimized for **Precision-Recall (PR-AUC)**:
 
 | Metric | Score | What It Means |
 | :--- | :---: | :--- |
 | **ROC-AUC** | **0.9997** | Strong ranking ability across all operating hours |
 | **PR-AUC** | **0.7888** | Reliable performance on the rare failure class (vs. random baseline of 0.0008) |
 | **Recall (Class 1)** | **74%** | Successfully catches nearly 3 out of every 4 impending breakdowns |
-| **Precision (Class 1)** | **69%** | Alerts are reliable—roughly 7 out of 10 flagged alerts represent actual degradation |
+| **Precision (Class 1)** | **69%** | Alerts are reliable, i.e. roughly 7 out of 10 flagged alerts represent actual degradation |
 | **F1-Score** | **0.71** | Balanced trade-off between early detection and minimizing false alarms |
 
 ---
@@ -102,8 +102,6 @@ Industrial Equipment Predictive Maintainance Analyser/
 │
 ├── main.py                               # Main pipeline entry point
 ├── requirements.txt                      # Python dependencies
-├── generate_interview_report.py          # Script to generate technical interview study PDF
-├── Interview_Report_Predictive_Maintenance.pdf # Comprehensive technical case study report
 └── README.md                             # Project documentation
 ```
 
@@ -117,21 +115,12 @@ git clone https://github.com/your-username/industrial-predictive-maintenance.git
 cd industrial-predictive-maintenance
 ```
 
-### 2. Set Up a Virtual Environment (Optional but Recommended)
-```bash
-python -m venv venv
-# On Windows (PowerShell):
-.\venv\Scripts\Activate.ps1
-# On macOS/Linux:
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
+### 2. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Download Dataset
+### 3. Download Dataset
 Place the Microsoft Azure Predictive Maintenance dataset files into the `data/` folder:
 - `PdM_telemetry.csv`
 - `PdM_errors.csv`
@@ -139,7 +128,7 @@ Place the Microsoft Azure Predictive Maintenance dataset files into the `data/` 
 - `PdM_failures.csv`
 - `PdM_machines.csv`
 
-### 5. Run the End-to-End Pipeline
+### 4. Run the End-to-End Pipeline
 ```bash
 python main.py
 ```
@@ -169,7 +158,7 @@ Component Age   : Comp1: 15d, Comp2: 90d, Comp3: 120d, Comp4: 30d
 ------------------------------------------------------------
 ```
 
-This output tells technicians **which** machine needs service, **why** (elevated error frequency and component age), and **when**—allowing proactive part replacements before an unplanned shutdown occurs.
+This output tells technicians **which** machine needs service, **why** (elevated error frequency and component age), and **when**, allowing proactive part replacements before an unplanned shutdown occurs.
 
 ---
 
